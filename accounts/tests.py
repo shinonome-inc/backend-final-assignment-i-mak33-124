@@ -8,7 +8,7 @@ User = get_user_model()
 class TestSignupView(TestCase):
     def setUp(self):
         self.url = reverse("accounts:signup")
-    
+
     def test_success_get(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
@@ -29,9 +29,7 @@ class TestSignupView(TestCase):
             status_code=302,
             target_status_code=200,
         )
-        self.assertTrue(
-            User.objects.filter(username=valid_data["username"]).exists()
-        )
+        self.assertTrue(User.objects.filter(username=valid_data["username"]).exists())
         self.assertIn(SESSION_KEY, self.client.session)
 
     def test_failure_post_with_empty_form(self):
@@ -46,7 +44,9 @@ class TestSignupView(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertFalse(
-            User.objects.filter(username=invalid_data["username"], email=invalid_data["email"]).exists()
+            User.objects.filter(
+                username=invalid_data["username"], email=invalid_data["email"]
+            ).exists()
         )
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors["username"], ["このフィールドは必須です。"])
@@ -70,7 +70,7 @@ class TestSignupView(TestCase):
         )
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors["username"], ["このフィールドは必須です。"])
-       
+
     def test_failure_post_with_empty_email(self):
         data = {
             "username": "testuser",
@@ -82,12 +82,10 @@ class TestSignupView(TestCase):
         form = response.context["form"]
 
         self.assertEqual(response.status_code, 200)
-        self.assertFalse(
-            User.objects.filter(username=data["email"]).exists()
-        )
+        self.assertFalse(User.objects.filter(username=data["email"]).exists())
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors["email"], ["このフィールドは必須です。"])
-       
+
     def test_failure_post_with_empty_password(self):
         empty_password_data = {
             "username": "testuser",
@@ -180,7 +178,9 @@ class TestSignupView(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors["password2"], ["このパスワードは一般的すぎます。", "このパスワードは数字しか使われていません。"])
+        self.assertEqual(
+            form.errors["password2"], ["このパスワードは一般的すぎます。", "このパスワードは数字しか使われていません。"]
+        )
 
     def test_failure_post_with_mismatch_password(self):
         mismatch_password_data = {
