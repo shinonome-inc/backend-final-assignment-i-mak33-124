@@ -1,8 +1,18 @@
+from django.contrib.auth import SESSION_KEY, get_user_model
 from django.test import TestCase
+from django.urls import reverse
+
+User = get_user_model()
 
 
-# class TestHomeView(TestCase):
-#     def test_success_get(self):
+class TestHomeView(TestCase):
+    def setUp(self):
+        self.url = reverse("accounts:signup")
+
+    def test_success_get(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "accounts/signup.html")
 
 
 # class TestTweetCreateView(TestCase):
