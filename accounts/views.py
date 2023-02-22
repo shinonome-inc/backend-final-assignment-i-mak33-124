@@ -1,8 +1,8 @@
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.mixins import LoginRequiredMixin  # ログイン時のみ表示するようにする
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, TemplateView
 
 from .forms import LoginForm, SignupForm  # 指定の仕方が分からない
 
@@ -27,8 +27,9 @@ class UserLoginView(LoginView):
     # form_classにform.pyで定義したLoginFormを指定することで、ログイン処理時にLoginFormで定義したフォームデザインが適用される。
 
 
-class UserLogoutView(LoginRequiredMixin, LogoutView):  # 必ず先頭に
+class UserLogoutView(LogoutView):
     template_name = "accounts/logout.html"
 
 
-# 要件によるとuserprifileも追加する必要あり
+class UserProfileView(LoginRequiredMixin, TemplateView):
+    template_name = "accounts/profile.html"
