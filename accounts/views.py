@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, TemplateView
 
@@ -25,10 +25,6 @@ class UserLoginView(LoginView):
     form_class = LoginForm  # Forms.pyのクラス
     template_name = "accounts/login.html"  # 実際に表示されるファイル
     # form_classにform.pyで定義したLoginFormを指定することで、ログイン処理時にLoginFormで定義したフォームデザインが適用される。
-
-
-class UserLogoutView(LogoutView):
-    template_name = "accounts/logout.html"
 
 
 class UserProfileView(LoginRequiredMixin, TemplateView):
