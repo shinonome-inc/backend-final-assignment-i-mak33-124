@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.contrib.auth import authenticate, login
+from django.contrib.auth import views as auth_views
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
@@ -10,7 +12,7 @@ from .forms import LoginForm, SignupForm  # 指定の仕方が分からない
 class SignupView(CreateView):
     form_class = SignupForm
     template_name = "accounts/signup.html"
-    success_url = reverse_lazy("tweets:home")
+    success_url = reverse_lazy(settings.LOGIN_REDIRECT_URL)
 
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -21,7 +23,7 @@ class SignupView(CreateView):
         return response
 
 
-class UserLoginView(LoginView):
+class LoginView(auth_views.LoginView):
     form_class = LoginForm  # Forms.pyのクラス
     template_name = "accounts/login.html"  # 実際に表示されるファイル
     # form_classにform.pyで定義したLoginFormを指定することで、ログイン処理時にLoginFormで定義したフォームデザインが適用される。
