@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.auth import get_user_model
+from django.contrib.auth import SESSION_KEY, get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
@@ -8,7 +8,7 @@ User = get_user_model()
 
 class TestSignupView(TestCase):
     def setUp(self):
-        self.url = reverse(settings.LOGIN_REDIRECT_URL)
+        self.url = reverse("accounts:signup")
 
     def test_success_get(self):
         response = self.client.get(self.url)
