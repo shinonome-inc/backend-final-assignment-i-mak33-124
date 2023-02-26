@@ -29,6 +29,7 @@ class TweetCreateView(LoginRequiredMixin, CreateView):
 class TweetDetailView(LoginRequiredMixin, DetailView):
     model = Tweet
     template_name = "tweets/detail.html"
+    context_object_name = "tweet"
 
 
 class TweetDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
