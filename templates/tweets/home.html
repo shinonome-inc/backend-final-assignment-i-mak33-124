@@ -7,10 +7,10 @@
 <div>
     {% for tweet in tweet_list %}
     <div>
-        <p>{{ tweet.id }}</p>
         <p>{{tweet.user}}</p>
         <p>{{tweet.created_time_date}}</p>
         <p>{{tweet.content}}</p>
+        <a href="{% url 'tweets:detail' tweet.pk %}">詳細</a>
     </div>
     {% endfor %}
 </div>
