@@ -9,6 +9,17 @@
 </head>
 
 <body>
+  <div>
+    {% if request.user.is_authenticated %}
+    <form action="{% url 'accounts:logout' %}" method="post">{% csrf_token %}
+      <button type="submit">ログアウト</button>
+    </form>
+    {% else %}
+    <a href="{% url 'accounts:login' %}">ログイン</a>
+    <a href="{% url 'accounts:signup' %}">登録</a>
+    {% endif %}
+    {% csrf_token %}
+  </div>
   {% block content %}
   {% endblock %}
 </body>

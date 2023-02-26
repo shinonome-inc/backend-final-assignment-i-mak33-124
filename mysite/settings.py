@@ -124,3 +124,9 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "accounts.User"
+
+LOGIN_URL = "accounts:login"  # 未認証のユーザーからのアクセスの場合
+
+LOGIN_REDIRECT_URL = "tweets:home"
+
+LOGOUT_REDIRECT_URL = "welcome:index"
