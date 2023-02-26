@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, get_user_model, login
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, TemplateView
+from django.views.generic import CreateView, DetailView
 
 from .forms import LoginForm, SignupForm
 
@@ -32,8 +32,9 @@ class LoginView(auth_views.LoginView):
     # form_classにform.pyで定義したLoginFormを指定することで、ログイン処理時にLoginFormで定義したフォームデザインが適用される。
 
 
-class UserProfileView(LoginRequiredMixin, TemplateView):
+class UserProfileView(LoginRequiredMixin, DetailView):
     model = User
+    context_object_name = "profile"
     template_name = "accounts/profile.html"
     slug_field = "username"
     slug_url_kwarg = "username"
