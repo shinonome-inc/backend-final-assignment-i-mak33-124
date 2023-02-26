@@ -5,7 +5,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, TemplateView
 
-from .forms import LoginForm, SignupForm  # 指定の仕方が分からない
+from .forms import LoginForm, SignupForm
+
+User = get_user_model()
 
 User = get_user_model()
 
@@ -32,6 +34,6 @@ class LoginView(auth_views.LoginView):
 
 class UserProfileView(LoginRequiredMixin, TemplateView):
     model = User
-    template_name = "accounts/user_profile.html"
+    template_name = "accounts/profile.html"
     slug_field = "username"
     slug_url_kwarg = "username"
