@@ -1,0 +1,18 @@
+{% extends "base.html" %} <!-- 継承 -->
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div>
+    <h1>ログイン</h1>
+    <div>
+        <form method="post">
+            <div>
+                {{ form.as_p }} <!--SignupFormをpタグで囲んで表示-->
+                {% csrf_token %} <!--正規のページからのアクセスであることの証明-->
+                <button type="submit">ログイン</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

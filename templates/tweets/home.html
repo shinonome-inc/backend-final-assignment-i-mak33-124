@@ -1,7 +1,17 @@
-{% extends "base.html" %} 
+{% extends 'base.html' %}
 
-{% block title %}Home{% endblock %} 
+{% block title %}home{% endblock %}
 
 {% block content %}
-<h1>Home</h1>
+<h1>home</h1>
+<div>
+    {% for tweet in tweet_list %}
+    <div>
+        <p>{{ tweet.id }}</p>
+        <p>{{tweet.user}}</p>
+        <p>{{tweet.created_time_date}}</p>
+        <p>{{tweet.content}}</p>
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}

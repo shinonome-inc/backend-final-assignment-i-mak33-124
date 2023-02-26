@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<h1>プロフィール</h1>
+<div>
+    <form method="POST">
+        <div>
+            {% for tweet in tweet_list %}
+            <div>
+                <p>{{ tweet.id }}</p>
+                <p>{{tweet.user}}</p>
+                <p>{{tweet.created_time_date}}</p>
+                <p>{{tweet.content}}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% csrf_token %}
+    </form>
+</div>
+{% endblock %}
