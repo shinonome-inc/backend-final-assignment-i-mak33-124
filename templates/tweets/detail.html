@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}詳細{% endblock %}
+
+{% block content %}
+<div>
+    <h1>detail</h1>
+    <div>
+        ID:{{ tweet.id }}
+        <div>
+            <p>投稿者:{{tweet.user}}</p>
+            <p>日付:{{tweet.created_time_date}}</p>
+            <p>内容:{{tweet.content}}</p>
+            <div>
+                <a href="{% url 'tweets:delete' tweet.pk %}">削除</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

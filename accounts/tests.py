@@ -202,7 +202,7 @@ class TestSignupView(TestCase):
 
 class TestLoginView(TestCase):
     def setUp(self):
-        User.objects.create_user(
+        self.user = User.objects.create_user(
             username="testuser",
             email="test@test.com",
             password="testpassword",
@@ -265,8 +265,8 @@ class TestLogoutView(TestCase):
         )
         self.client.login(username="testuser", password="testpassword")
 
-    def test_success_get(self):
-        response = self.client.get(reverse("accounts:logout"))
+    def test_success_post(self):
+        response = self.client.post(reverse("accounts:logout"))
         self.assertRedirects(
             response,
             reverse(settings.LOGOUT_REDIRECT_URL),
@@ -277,13 +277,12 @@ class TestLogoutView(TestCase):
 
 
 class TestUserProfileView(TestCase):
-    pass
-
     def setUp(self):
         self.user = User.objects.create_user(
             username="testuser", password="testpassword"
         )
         self.client.login(username="testuser", password="testpassword")
+        self.objects = Tweet.objects.create(user=self.user, content="test")
 
     def test_success_get(self):
         response = self.client.get(reverse("tweets:home"))
