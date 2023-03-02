@@ -10,7 +10,7 @@ class SignupForm(UserCreationForm):
         fields = ("username", "email")
 
 
-class LoginForm(AuthenticationForm):  # ユーザー名とパスワードで認証する画面を作れる
+class LoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):  # *でタプル型、**辞書型として値を受け取れる、__init__はクラスを書いた時に実行される
         super().__init__(*args, **kwargs)  # super()は継承の際に用いる
         for field in self.fields.values():
