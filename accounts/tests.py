@@ -46,11 +46,7 @@ class TestSignupView(TestCase):
         form = response.context["form"]
 
         self.assertEqual(response.status_code, 200)
-        self.assertFalse(
-            User.objects.filter(
-                username=invalid_data["username"], email=invalid_data["email"]
-            ).exists()
-        )
+        self.assertFalse(User.objects.filter(username=invalid_data["username"], email=invalid_data["email"]).exists())
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors["username"], ["このフィールドは必須です。"])
         self.assertEqual(form.errors["email"], ["このフィールドは必須です。"])
@@ -68,9 +64,7 @@ class TestSignupView(TestCase):
         form = response.context["form"]
 
         self.assertEqual(response.status_code, 200)
-        self.assertFalse(
-            User.objects.filter(username=empty_username_data["username"]).exists()
-        )
+        self.assertFalse(User.objects.filter(username=empty_username_data["username"]).exists())
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors["username"], ["このフィールドは必須です。"])
 
@@ -100,9 +94,7 @@ class TestSignupView(TestCase):
         form = response.context["form"]
 
         self.assertEqual(response.status_code, 200)
-        self.assertFalse(
-            User.objects.filter(username=empty_password_data["password1"]).exists()
-        )
+        self.assertFalse(User.objects.filter(username=empty_password_data["password1"]).exists())
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors["password1"], ["このフィールドは必須です。"])
         self.assertEqual(form.errors["password2"], ["このフィールドは必須です。"])
@@ -181,9 +173,7 @@ class TestSignupView(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertFalse(form.is_valid())
-        self.assertEqual(
-            form.errors["password2"], ["このパスワードは一般的すぎます。", "このパスワードは数字しか使われていません。"]
-        )
+        self.assertEqual(form.errors["password2"], ["このパスワードは一般的すぎます。", "このパスワードは数字しか使われていません。"])
 
     def test_failure_post_with_mismatch_password(self):
         mismatch_password_data = {
@@ -202,7 +192,6 @@ class TestSignupView(TestCase):
 
 class TestLoginView(TestCase):
     def setUp(self):
-
         self.user = User.objects.create_user(
             username="testuser",
             email="test@test.com",
@@ -261,9 +250,7 @@ class TestLoginView(TestCase):
 
 class TestLogoutView(TestCase):
     def setUp(self):
-      　self.user = User.objects.create_user(
-        username="testuser", password="testpassword"
-        
+        self.user = User.objects.create_user(username="testuser", password="testpassword")
 
         self.client.login(username="testuser", password="testpassword")
 
@@ -280,9 +267,7 @@ class TestLogoutView(TestCase):
 
 class TestUserProfileView(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(
-            username="testuser", password="testpassword"
-        )
+        self.user = User.objects.create_user(username="testuser", password="testpassword")
         self.client.login(username="testuser", password="testpassword")
         self.objects = Tweet.objects.create(user=self.user, content="test")
 
@@ -293,10 +278,7 @@ class TestUserProfileView(TestCase):
 
         tweets = response.context["tweet_list"]
         self.assertEqual(tweets.count(), Tweet.objects.all().count())  # レコード数が一致するかどうか
-        self.assertEqual(
-            tweets.first().created_time_date, Tweet.objects.first().created_time_date
-        )
-
+        self.assertEqual(tweets.first().created_time_date, Tweet.objects.first().created_time_date)
 
 
 class TestUserProfileEditView(TestCase):

@@ -11,4 +11,3 @@ class Tweet(models.Model):
 
     def __str__(self):
         return self.content  # 管理画面でデータの判別をしやすくする(つけないと中身の判別ができない)
-
