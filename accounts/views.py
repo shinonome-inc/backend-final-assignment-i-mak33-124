@@ -4,9 +4,7 @@ from django.contrib.auth import views as auth_views
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView
-
 from tweets.models import Tweet
-
 from .forms import LoginForm, SignupForm
 
 User = get_user_model()
@@ -37,6 +35,7 @@ class UserProfileView(LoginRequiredMixin, DetailView):
     template_name = "accounts/profile.html"
     slug_field = "username"  # URLの末尾を指定
     slug_url_kwarg = "username"
+    
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
