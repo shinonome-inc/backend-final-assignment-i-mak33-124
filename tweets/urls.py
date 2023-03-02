@@ -11,4 +11,4 @@ urlpatterns = [
     path("<int:pk>/delete/", views.TweetDeleteView.as_view(), name="delete"),
     # path('<int:pk>/like/', views.LikeView, name='like'),
     # path('<int:pk>/unlike/', views.UnlikeView, name='unlike'),
-]
+

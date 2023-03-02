@@ -202,6 +202,7 @@ class TestSignupView(TestCase):
 
 class TestLoginView(TestCase):
     def setUp(self):
+
         self.user = User.objects.create_user(
             username="testuser",
             email="test@test.com",
@@ -260,9 +261,10 @@ class TestLoginView(TestCase):
 
 class TestLogoutView(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(
-            username="testuser", password="testpassword"
-        )
+      　self.user = User.objects.create_user(
+        username="testuser", password="testpassword"
+        
+
         self.client.login(username="testuser", password="testpassword")
 
     def test_success_post(self):
@@ -294,6 +296,7 @@ class TestUserProfileView(TestCase):
         self.assertEqual(
             tweets.first().created_time_date, Tweet.objects.first().created_time_date
         )
+
 
 
 class TestUserProfileEditView(TestCase):
