@@ -1,7 +1,4 @@
-from django.contrib.auth.mixins import (  # ログイン時のみ表示するようにする
-    LoginRequiredMixin,
-    UserPassesTestMixin,
-)
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView
 
@@ -19,9 +16,7 @@ class TweetCreateView(LoginRequiredMixin, CreateView):
     template_name = "tweets/create.html"
     success_url = reverse_lazy("tweets:home")
 
-    def form_valid(
-        self, form
-    ):  # 投稿ユーザーとリクエストユーザーを紐づける,https://qiita.com/K_SIO/items/dd9f556ae57780448ef0
+    def form_valid(self, form):  # 投稿ユーザーとリクエストユーザーを紐づける,https://qiita.com/K_SIO/items/dd9f556ae57780448ef0
         form.instance.user = self.request.user
         return super().form_valid(form)
 
