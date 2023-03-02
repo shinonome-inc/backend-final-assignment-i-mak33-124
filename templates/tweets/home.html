@@ -5,9 +5,10 @@
 {% block content %}
 <h1>home</h1>
 <div>
+    <a href="{% url 'tweets:create' %}"><button type="submit">投稿</button></a>
     {% for tweet in tweet_list %}
     <div>
-        <p>{{tweet.user}}</p>
+        <a href="{% url 'accounts:profile'  tweet.user %}">{{tweet.user}}</a>
         <p>{{tweet.created_time_date}}</p>
         <p>{{tweet.content}}</p>
         <a href="{% url 'tweets:detail' tweet.pk %}">詳細</a>
