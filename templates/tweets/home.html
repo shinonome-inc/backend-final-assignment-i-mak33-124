@@ -9,7 +9,7 @@
     {% for tweet in tweet_list %}
     <div>
         <a href="{% url 'accounts:profile'  tweet.user %}">{{tweet.user}}</a>
-        <p>{{tweet.created_time_date}}</p>
+        <p>{{tweet.created_at}}</p>
         <p>{{tweet.content}}</p>
         <a href="{% url 'tweets:detail' tweet.pk %}">詳細</a>
     </div>

@@ -17,7 +17,7 @@ class TestHomeView(TestCase):
         response = self.client.get(reverse("tweets:home"))
         tweets = response.context["tweet_list"]
         self.assertEqual(tweets.count(), Tweet.objects.all().count())  # レコード数が一致するかどうか
-        self.assertEqual(tweets.first().created_time_date, Tweet.objects.first().created_time_date)
+        self.assertEqual(tweets.first().created_at, Tweet.objects.first().created_at)
 
 
 class TestTweetCreateView(TestCase):

@@ -9,9 +9,8 @@
         <div>
             {% for tweet in tweet_list %}
             <div>
-                <p>{{ tweet.id }}</p>
                 <p>{{tweet.user}}</p>
-                <p>{{tweet.created_time_date}}</p>
+                <p>{{tweet.created_at}}</p>
                 <p>{{tweet.content}}</p>
             </div>
             {% endfor %}
