@@ -1,13 +1,17 @@
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import authenticate, get_user_model, login
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView, DetailView, View
 
 from tweets.models import Tweet
 
 from .forms import LoginForm, SignupForm
+from .models import Friendship
 
 User = get_user_model()
 
@@ -43,3 +47,43 @@ class UserProfileView(LoginRequiredMixin, DetailView):
         user = self.object
         context["tweet_list"] = Tweet.objects.select_related("user").filter(user=user)  # TweetCreateViewで作ったツイートの一覧を作成
         return context
+
+
+@login_required
+class FollowView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        follower = self.request.user
+        following = get_object_or_404(User, username=self.kwargs["username"])
+
+        if User.DoesNotExist:
+            messages.warning(request, "{}は存在しません".format(kwargs["username"]))
+
+        if follower == following:
+            messages.warning(request, "自分自身はフォローできません")
+
+        if Friendship.objects.filter(follower=follower, following=following).exists():
+            messages.warning(request, "あなたはすでに{}をフォローしています".format(following.username))
+            return redirect("tweets:home")
+
+        else:
+            Friendship.objects.get_or_create(follower=follower, following=following)
+            messages.success(request, "{}をフォローしました".format(following.username))
+
+
+@login_required
+class UnFollowView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        follower = self.request.user
+        following = get_object_or_404(User, username=self.kwargs["username"])
+
+        if User.DoesNotExist:
+            messages.warning(request, "{}は存在しません".format(kwargs["username"]))
+
+        if follower == following:
+            messages.warning(request, "自分自身のフォローを外せません")
+
+        else:
+            unfollow = Friendship.objects.get(follower=follower, following=following)
+            unfollow.delete()
+            messages.success(request, "{}のフォローを外しました".format(following.username))
+            return redirect("tweets:home")
