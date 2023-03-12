@@ -3,6 +3,8 @@ from django.contrib.auth import SESSION_KEY, get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
+from tweets.models import Tweet
+
 User = get_user_model()
 
 
@@ -44,11 +46,7 @@ class TestSignupView(TestCase):
         form = response.context["form"]
 
         self.assertEqual(response.status_code, 200)
-        self.assertFalse(
-            User.objects.filter(
-                username=invalid_data["username"], email=invalid_data["email"]
-            ).exists()
-        )
+        self.assertFalse(User.objects.filter(username=invalid_data["username"], email=invalid_data["email"]).exists())
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors["username"], ["このフィールドは必須です。"])
         self.assertEqual(form.errors["email"], ["このフィールドは必須です。"])
@@ -66,9 +64,7 @@ class TestSignupView(TestCase):
         form = response.context["form"]
 
         self.assertEqual(response.status_code, 200)
-        self.assertFalse(
-            User.objects.filter(username=empty_username_data["username"]).exists()
-        )
+        self.assertFalse(User.objects.filter(username=empty_username_data["username"]).exists())
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors["username"], ["このフィールドは必須です。"])
 
@@ -98,9 +94,7 @@ class TestSignupView(TestCase):
         form = response.context["form"]
 
         self.assertEqual(response.status_code, 200)
-        self.assertFalse(
-            User.objects.filter(username=empty_password_data["password1"]).exists()
-        )
+        self.assertFalse(User.objects.filter(username=empty_password_data["password1"]).exists())
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors["password1"], ["このフィールドは必須です。"])
         self.assertEqual(form.errors["password2"], ["このフィールドは必須です。"])
@@ -179,9 +173,7 @@ class TestSignupView(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertFalse(form.is_valid())
-        self.assertEqual(
-            form.errors["password2"], ["このパスワードは一般的すぎます。", "このパスワードは数字しか使われていません。"]
-        )
+        self.assertEqual(form.errors["password2"], ["このパスワードは一般的すぎます。", "このパスワードは数字しか使われていません。"])
 
     def test_failure_post_with_mismatch_password(self):
         mismatch_password_data = {
@@ -200,7 +192,7 @@ class TestSignupView(TestCase):
 
 class TestLoginView(TestCase):
     def setUp(self):
-        User.objects.create_user(
+        self.user = User.objects.create_user(
             username="testuser",
             email="test@test.com",
             password="testpassword",
@@ -258,10 +250,8 @@ class TestLoginView(TestCase):
 
 class TestLogoutView(TestCase):
     def setUp(self):
-        self.user = {
-            "username": "testuser",
-            "password": "testpassword",
-        }
+        self.user = User.objects.create_user(username="testuser", password="testpassword")
+
         self.client.login(username="testuser", password="testpassword")
 
     def test_success_post(self):
@@ -276,15 +266,19 @@ class TestLogoutView(TestCase):
 
 
 class TestUserProfileView(TestCase):
-    pass
-    # def setUp(self):
-    #     self.user = User.objects.create_user(
-    #         username="testuser",
-    #     )
-    #     self.url = reverse("accounts:user_profile")
-    # def test_success_get(self):
-    #     response = self.client.get(self.url)
-    #     self.assertEqual(response.status_code, 200)
+    def setUp(self):
+        self.user = User.objects.create_user(username="testuser", password="testpassword")
+        self.client.login(username="testuser", password="testpassword")
+        self.objects = Tweet.objects.create(user=self.user, content="test")
+
+    def test_success_get(self):
+        response = self.client.get(reverse("tweets:home"))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "tweets/home.html")
+
+        tweets = response.context["tweet_list"]
+        self.assertEqual(tweets.count(), Tweet.objects.all().count())  # レコード数が一致するかどうか
+        self.assertEqual(tweets.first().created_at, Tweet.objects.first().created_at)
 
 
 class TestUserProfileEditView(TestCase):

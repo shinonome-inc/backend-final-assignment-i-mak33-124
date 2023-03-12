@@ -5,9 +5,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView
 
-from .forms import LoginForm, SignupForm
+from tweets.models import Tweet
 
-User = get_user_model()
+from .forms import LoginForm, SignupForm
 
 User = get_user_model()
 
@@ -34,7 +34,12 @@ class LoginView(auth_views.LoginView):
 
 class UserProfileView(LoginRequiredMixin, DetailView):
     model = User
-    context_object_name = "profile"
     template_name = "accounts/profile.html"
-    slug_field = "username"
+    slug_field = "username"  # URLの末尾を指定
     slug_url_kwarg = "username"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.object
+        context["tweet_list"] = Tweet.objects.select_related("user").filter(user=user)  # TweetCreateViewで作ったツイートの一覧を作成
+        return context

@@ -1,7 +1,18 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}home{% endblock %}
 
 {% block content %}
-<h1>Home</h1>
+<h1>home</h1>
+<div>
+    <a href="{% url 'tweets:create' %}"><button type="submit">投稿</button></a>
+    {% for tweet in tweet_list %}
+    <div>
+        <a href="{% url 'accounts:profile'  tweet.user %}">{{tweet.user}}</a>
+        <p>{{tweet.created_at}}</p>
+        <p>{{tweet.content}}</p>
+        <a href="{% url 'tweets:detail' tweet.pk %}">詳細</a>
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}

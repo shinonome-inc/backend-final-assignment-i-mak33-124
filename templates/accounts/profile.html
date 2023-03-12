@@ -1,9 +1,21 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-{% block title %} PROFILE {% endblock %}
+{% block title %}Profile{% endblock %}
 
 {% block content %}
-<h1>
-    {{ profile.username }}
-</h1>
+<h1>プロフィール</h1>
+<div>
+    <form method="POST">
+        <div>
+            {% for tweet in tweet_list %}
+            <div>
+                <p>{{tweet.user}}</p>
+                <p>{{tweet.created_at}}</p>
+                <p>{{tweet.content}}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% csrf_token %}
+    </form>
+</div>
 {% endblock %}
