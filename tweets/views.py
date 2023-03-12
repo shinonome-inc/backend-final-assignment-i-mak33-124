@@ -8,6 +8,7 @@ from .models import Tweet
 class HomeView(LoginRequiredMixin, ListView):  # 必ず先頭に
     model = Tweet
     template_name = "tweets/home.html"
+    queryset = Tweet.objects.all().select_related("user")
 
 
 class TweetCreateView(LoginRequiredMixin, CreateView):
