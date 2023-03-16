@@ -6,8 +6,8 @@
 <h1>フォロワーー覧</h1>
 {% if follower_list %}
 <div>
-    {% for object in following_list %}
-    <a href="{% url 'accounts:profile' object.follower.username %}">{{object.follower}}</a>
+    {% for object in follower_list %}
+    <a href="{% url 'accounts:profile' user.username %}">{{object.follower}}</a>
     {% endfor %}
 </div>
 {% else %}
