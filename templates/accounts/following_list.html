@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
-{% block title %}フォロ一覧{% endblock %}
+{% block title %}フォロー一覧{% endblock %}
 
 {% block content %}
-<h1>フォロ一覧</h1>
+<h1>フォロー一覧</h1>
 {% if following_list %}
 <div>
     {% for object in following_list %}
-    <a href="{% url 'accounts:profile' object.following.username %}">{{ object.following}}</a>
+    <a href="{% url 'accounts:profile' object.following.username %}">{{object.following}}</a>
     {% endfor %}
 </div>
 {% else %}
