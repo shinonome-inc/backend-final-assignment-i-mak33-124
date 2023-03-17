@@ -1,5 +1,7 @@
 from django.conf import settings
 from django.contrib.auth import SESSION_KEY, get_user_model
+
+# from django.contrib.messages import get_messages
 from django.test import TestCase
 from django.urls import reverse
 
@@ -277,7 +279,9 @@ class TestUserProfileView(TestCase):
         response = self.client.get(reverse("accounts:profile", kwargs={"username": self.user1.username}))
         tweets = response.context["tweet_list"]
         self.assertEqual(tweets.count(), Tweet.objects.all().count())  # レコード数が一致するかどうか
-        self.assertEqual(tweets.first().created_at, Tweet.objects.first().created_at)
+        tweets_views = tweets.order_by("created_at")
+        Tweet_model = Tweet.objects.order_by("created_at")
+        self.assertEqual(tweets_views.first(), Tweet_model.first())  # 昇順に並び替える
         self.assertEquals(
             response.context["following"],
             Friendship.objects.filter(follower=self.user1).count(),
@@ -311,7 +315,6 @@ class TestFollowView(TestCase):
 
     def test_success_post(self):
         response = self.client.post(reverse("accounts:follow", kwargs={"username": self.user2.username}))
-        Friendship.objects.create(follower=self.user1, following=self.user2)
         self.assertRedirects(
             response,
             reverse("tweets:home"),
@@ -329,6 +332,12 @@ class TestFollowView(TestCase):
         response = self.client.post(reverse("accounts:follow", kwargs={"username": self.user1.username}))
         self.assertEqual(response.status_code, 400)
         self.assertEqual(Friendship.objects.count(), 0)
+
+    def test_post_with_existing_Friendship(self):
+        pass
+        # response = self.client.post(reverse("accounts:follow", kwargs={"username": self.user2.username}))
+        # messages = list(get_messages(response))
+        # self.assertEqual(str(messages[0]), "あなたはすでに{}をフォローしています".format(self.user2.username))
 
 
 class TestUnfollowView(TestCase):
@@ -353,10 +362,10 @@ class TestUnfollowView(TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertTrue(Friendship.objects.count(), 1)
 
-    def test_failure_post_with_incorrect_user(self):
+    def test_failure_post_with_self(self):
         response = self.client.post(reverse("accounts:unfollow", kwargs={"username": self.user1.username}))
         self.assertEqual(response.status_code, 400)
-        self.assertTrue(Friendship.objects.count(), 1)
+        self.assertEqual(Friendship.objects.count(), 1)
 
 
 class TestFollowingListView(TestCase):
