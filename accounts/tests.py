@@ -280,9 +280,7 @@ class TestUserProfileView(TestCase):
         response = self.client.get(reverse("accounts:profile", kwargs={"username": self.user1.username}))
         tweets = response.context["tweet_list"]
         self.assertEqual(tweets.count(), Tweet.objects.all().count())  # レコード数が一致するかどうか
-        tweets_views = tweets.order_by("created_at")
-        Tweet_model = Tweet.objects.order_by("created_at")
-        self.assertEqual(tweets_views.first(), Tweet_model.first())  # 昇順に並び替える
+        self.assertQuerysetEqual(tweets, Tweet.objects.filter(user=self.user1).order_by("created_at"))  # 昇順に並び替える
         self.assertEquals(
             response.context["following"],
             Friendship.objects.filter(follower=self.user1).count(),
