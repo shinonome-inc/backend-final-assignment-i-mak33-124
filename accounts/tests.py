@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth import SESSION_KEY, get_user_model
+from django.contrib.messages import get_messages
 
 # from django.contrib.messages import get_messages
 from django.test import TestCase
@@ -334,10 +335,13 @@ class TestFollowView(TestCase):
         self.assertEqual(Friendship.objects.count(), 0)
 
     def test_post_with_existing_Friendship(self):
-        pass
-        # response = self.client.post(reverse("accounts:follow", kwargs={"username": self.user2.username}))
-        # messages = list(get_messages(response))
-        # self.assertEqual(str(messages[0]), "あなたはすでに{}をフォローしています".format(self.user2.username))
+        Friendship.objects.create(follower=self.user1, following=self.user2)
+        response = self.client.post(reverse("accounts:follow", kwargs={"username": self.user2.username}))
+        messages = list(
+            get_messages(response.wsgi_request)
+        )  # リクエストの内容がresponse.wsgi_requestに収納される　https://qiita.com/i05tream/items/45cfd5e269cf8b2cef54
+        message = str(messages[0])
+        self.assertEqual(message, f"あなたはすでに{self.user2.username}をフォローしています")  # フォーマットのやり方が悪かった、Hasegawaさんのコード参照
 
 
 class TestUnfollowView(TestCase):
