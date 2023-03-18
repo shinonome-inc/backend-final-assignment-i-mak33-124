@@ -8,7 +8,7 @@
     <div>
         <div>
             <a href="{% url 'accounts:profile'  tweet.user %}">投稿者:{{tweet.user}}</a>
-            <p>日付:{{tweet.created_at}}</p>
+            <p>作成日時:{{tweet.created_at}}</p>
             <p>内容:{{tweet.content}}</p>
             <div>
                 <a href="{% url 'tweets:delete' tweet.pk %}">削除</a>
