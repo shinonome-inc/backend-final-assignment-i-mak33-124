@@ -11,3 +11,9 @@ class Tweet(models.Model):
 
     def __str__(self):
         return self.content  # 管理画面でデータの判別をしやすくする(つけないと中身の判別ができない)
+
+
+class Like(models.Model):
+    post = models.ForeignKey(Tweet, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)

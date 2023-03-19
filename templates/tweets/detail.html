@@ -10,6 +10,7 @@
             <a href="{% url 'accounts:profile'  tweet.user %}">投稿者:{{tweet.user}}</a>
             <p>作成日時:{{tweet.created_at}}</p>
             <p>内容:{{tweet.content}}</p>
+            <p>{{ likes_count }} likes</p>
             <div>
                 <a href="{% url 'tweets:delete' tweet.pk %}">削除</a>
             </div>
