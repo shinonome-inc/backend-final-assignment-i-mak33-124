@@ -34,8 +34,10 @@ class TweetDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        likes_count = Like.objects.filter(post=self.get_object()).count()
+        tweet = self.get_object()
+        likes_count = Like.objects.filter(post=tweet).count()
         context["likes_count"] = likes_count
+        context["is_like"] = Like.objects.filter(post=tweet, user=self.request.user).exists()
         return context
 
 
@@ -65,8 +67,8 @@ class UnlikeView(LoginRequiredMixin, View):
     def post(self, request, pk, *args, **kwargs):
         post = get_object_or_404(Tweet, pk=pk)
 
-        if not Like.objects.filter(user=request.user, post=post).exists():
-            return HttpResponseBadRequest("既にいいねされています")
+        if not Like.objects.filter(user=request.user, post=post).exists:
+            return HttpResponseBadRequest("いいねされていません")
 
         else:
             Like.objects.filter(user=request.user, post=post).delete()
