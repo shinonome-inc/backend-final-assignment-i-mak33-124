@@ -1,27 +1,28 @@
 {% extends "base.html" %}
-
 {% block title %}詳細{% endblock %}
 
 {% block content %}
+<style>
+    .delete {
+        text-decoration: underline;
+        color: black;
+    }
+
+</style>
 <div>
     <h1>detail</h1>
     <div>
         <div>
             <a href="{% url 'accounts:profile'  tweet.user %}">投稿者:{{tweet.user}}</a>
             <p>作成日時:{{tweet.created_at}}</p>
-            <p>内容:{{tweet.content}}</p>
-            {% if is_like %}
-            <form action="{% url 'tweets:unlike' tweet.pk %}" method="POST">{% csrf_token %}
-                <button type="submit">いいねを外す</button>
-                {% else %}
-                <form action="{% url 'tweets:like' tweet.pk %}" method="POST">{% csrf_token %}
-                    <button type="submit">いいね</button>
-                    {% endif %}
-                    <p>{{ likes_count }}いいね</p>
+            <p>いいね:{{tweet.liked_tweet.count}}</p>
         </div>
-        {% if tweet.user == request.user %}
-        <a href="{% url 'tweets:delete' tweet.pk %}">削除</a>
-        {% endif %}
+        <p>{{tweet.content}}</p>
+        <div class="delete">
+            {% if tweet.user == request.user %}
+            <a href="{% url 'tweets:delete' tweet.pk %}">削除</a>
+            {% endif %}
+        </div>
     </div>
 </div>
 {% endblock %}

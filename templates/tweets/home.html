@@ -3,16 +3,44 @@
 {% block title %}home{% endblock %}
 
 {% block content %}
+<style>
+    h1 {
+        font-weight: normal;
+    }
+
+    .detail {
+        text-decoration: underline;
+        color: blue;
+    }
+
+    a {
+        display: inline;
+    }
+
+    p {
+        display: inline;
+    }
+
+    .flame {
+        border: 1px solid black;
+        padding: 5px;
+        margin-bottom: 10px;
+        width: 400px;
+    }
+
+</style>
 <h1>home</h1>
 <div>
-    <a href="{% url 'tweets:create' %}"><button type="submit">投稿</button></a>
     {% for tweet in tweet_list %}
-    <div>
-        <a href="{% url 'accounts:profile'  tweet.user %}">{{tweet.user}}</a>
-        <p>{{tweet.created_at}}</p>
-        <p>{{tweet.content}}</p>
-        <a href="{% url 'tweets:detail' tweet.pk %}">詳細</a>
+    <div class="flame">
+        <a href="{% url 'accounts:profile'  tweet.user %}">投稿者:{{tweet.user}}</a>
+        <p>作成日時:{{tweet.created_at}}</p>
     </div>
-    {% endfor %}
+    <p>{{tweet.content}}</p>
+</div><br>
+<a href="{% url 'tweets:detail' tweet.pk %}" class="detail">詳細</a>
+{% include "tweets/like.html" %}
+{% endfor %}
 </div>
+{% include "tweets/like_js.html" %}
 {% endblock %}

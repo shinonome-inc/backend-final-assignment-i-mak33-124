@@ -3,44 +3,86 @@
 {% block title %}Profile{% endblock %}
 
 {% block content %}
-<h1>プロフィール</h1>
+<style>
+    h1 {
+        font-weight: normal;
+    }
+
+    .detail {
+        text-decoration: underline;
+        color: blue;
+    }
+
+    a {
+        display: inline;
+    }
+
+    p {
+        display: inline;
+    }
+
+    .follow {
+        text-decoration: underline;
+        color: black;
+    }
+
+    .flame {
+        border: 1px solid black;
+        padding: 5px;
+        margin-bottom: 10px;
+        width: 400px;
+    }
+
+    .profile {
+        display: flex;
+        gap: 30px;
+        align-items: center;
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+
+</style>
+<h1>{{user.username}}のProfile</h1>
+<div class="profile">
+    <p>フォロー数:{{following}}</p>
+    <p>フォロワー数:{{follower}}</p>
+    <div class="follow">
+        <a href="{% url 'accounts:following_list' user.username %}">フォロー一覧</a>
+        <a href="{% url 'accounts:follower_list' user.username %}">フォロワー一覧</a>
+    </div>
+</div>
 <div>
-    <div>
-        <div>
-            <a href="{% url 'accounts:following_list' user.username %}">フォロー数:{{following}}</a>
-            <a href="{% url 'accounts:follower_list' user.username %}">フォロワー数:{{follower}}</a>
-        </div>
+    {% if object.username != request.user.username %}
+    {% if is_following %}
+    <form action="{%  url 'accounts:unfollow' user.username %}" method="POST">{% csrf_token %}
+        <button type="submit">フォローを外す</button>
+    </form>
+    {% else %}
+    <form action="{%  url 'accounts:follow' user.username %}" method="POST">{% csrf_token %}
+        <button type="submit">フォローする</button>
+    </form>
+    <br>
+    {% endif %}
+    {% endif %}
+</div>
+<div>
+    {% for tweet in tweet_list %}
+    <div class="flame">
+        <a href="{% url 'accounts:profile'  tweet.user %}">投稿者:{{tweet.user}}</a>
+        <p>作成日時:{{tweet.created_at}}</p>
     </div>
-    <div>
-        {% for tweet in tweet_list %}
-        <div>
-            <p>投稿者:{{tweet.user}}</p>
-            <p>作成日時:{{tweet.created_at}}</p>
-            <p>内容:{{tweet.content}}</p>
-        </div>
+    <p>{{tweet.content}}</p><br>
+</div>
+<p>いいね:{{tweet.liked_tweet.count}}</p><br>
+<a href="{% url 'tweets:detail' tweet.pk %}" class="detail">詳細</a>
+{% endfor %}
+<div>
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
         {% endfor %}
-    </div>
-    <div>
-        {% if object.username != request.user.username %}
-        {% if is_following %}
-        <form action="{%  url 'accounts:unfollow' user.username %}" method="POST">{% csrf_token %}
-            <button type="submit">フォロー解除</button>
-        </form>
-        {% else %}
-        <form action="{%  url 'accounts:follow' user.username %}" method="POST">{% csrf_token %}
-            <button type="submit">フォロー</button>
-        </form>
-        {% endif %}
-        {% endif %}
-    </div>
-    <div>
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-    </div>
+    </ul>
+    {% endif %}
 </div>
 {% endblock %}

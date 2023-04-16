@@ -3,11 +3,18 @@
 {% block title %}フォロー一覧{% endblock %}
 
 {% block content %}
+<style>
+    a {
+        text-decoration: underline;
+        color: black;
+    }
+
+</style>
 <h1>フォロー一覧</h1>
 {% if following_list %}
 <div>
     {% for object in following_list %}
-    <a href="{% url 'accounts:profile' user.username %}">{{object.following}}</a>
+    <a href="{% url 'accounts:profile' object.following %}">{{object.following}}</a>
     {% endfor %}
 </div>
 {% else %}
