@@ -73,7 +73,7 @@
     </div>
     <p>{{tweet.content}}</p><br>
 </div>
-<p>いいね:{{tweet.liked_tweet.count}}</p><br>
+{% include "tweets/like.html" %}<br>
 <a href="{% url 'tweets:detail' tweet.pk %}" class="detail">詳細</a>
 {% endfor %}
 <div>
@@ -85,4 +85,5 @@
     </ul>
     {% endif %}
 </div>
+{% include "tweets/like_js.html" %}
 {% endblock %}
