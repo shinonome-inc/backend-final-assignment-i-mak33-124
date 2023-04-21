@@ -11,3 +11,16 @@ class Tweet(models.Model):
 
     def __str__(self):
         return self.content  # 管理画面でデータの判別をしやすくする(つけないと中身の判別ができない)
+
+
+class Like(models.Model):
+    tweet = models.ForeignKey(
+        Tweet,
+        related_name="liked_tweet",
+        on_delete=models.CASCADE,
+    )
+    user = models.ForeignKey(User, related_name="liked_user", on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=["tweet", "user"], name="unique_like")]

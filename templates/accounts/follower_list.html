@@ -3,11 +3,18 @@
 {% block title %}フォロワー一覧{% endblock %}
 
 {% block content %}
+<style>
+    a {
+        text-decoration: underline;
+        color: black;
+    }
+
+</style>
 <h1>フォロワーー覧</h1>
 {% if follower_list %}
 <div>
     {% for object in follower_list %}
-    <a href="{% url 'accounts:profile' user.username %}">{{object.follower}}</a>
+    <a href="{% url 'accounts:profile' object.follower %}">{{object.follower}}</a>
     {% endfor %}
 </div>
 {% else %}

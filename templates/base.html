@@ -8,17 +8,57 @@
   <title>{% block title %}Twitter Clone{% endblock %}</title>
 </head>
 
+<style>
+  ul {
+    display: flex;
+  }
+
+  li {
+    list-style: none;
+  }
+
+  h1 {
+    font-weight: normal;
+  }
+
+  a {
+    display: block;
+    text-decoration: none;
+    color: black;
+    margin-right: 35px;
+    cursor: pointer;
+  }
+
+  .logout-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: inherit;
+    padding: 0;
+  }
+
+</style>
+
 <body>
   <div>
     {% if request.user.is_authenticated %}
-    <form action="{% url 'accounts:logout' %}" method="post">{% csrf_token %}
-      <button type="submit">ログアウト</button>
-    </form>
+    <ul>
+      <li><a href="{% url 'tweets:home' %}">HOME</a></li>
+      <li><a href="{% url 'tweets:create' %}">TWEET</a></li>
+      <li><a href="{% url 'accounts:profile' user.username %}">PROFILE</a></li>
+      <li>
+        <form action="{% url 'accounts:logout' %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="logout-button">LOGOUT</button>
+        </form>
+      </li>
+    </ul>
     {% else %}
-    <a href="{% url 'accounts:login' %}">ログイン</a>
-    <a href="{% url 'accounts:signup' %}">登録</a>
+    <ul>
+      <li><a href="{% url 'accounts:login' %}">LOGIN</a></li>
+      <li><a href="{% url 'accounts:signup' %}">REGISTER</a></li>
+    </ul>
     {% endif %}
-    {% csrf_token %}
   </div>
   {% block content %}
   {% endblock %}
